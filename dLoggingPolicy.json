@@ -1,0 +1,151 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"location": {
+			"type": "string",
+			"metadata": {
+				"description": "The location name for the region."
+			}
+		},
+		"diagnosticsSettingName": {
+			"type": "string",
+			"metadata": {
+				"description": "The name of the KV Diagnostic setting"
+			}
+		},
+		"storageAccount": {
+			"type": "string",
+			"metadata": {
+				"description": "ID of the regional storage account to send the logs."
+			}
+		},
+		"policyName": {
+			"type": "string",
+			"metadata": {
+				"description": "The name of the policy"
+			}
+		},
+		"policyDisplayName": {
+			"type": "string",
+			"metadata": {
+				"description": "The display name of the policy"
+			}
+		}
+	},
+	"variables": {},
+	"resources": [{
+		"type": "Microsoft.Authorization/policyDefinitions",
+		"apiVersion": "2018-05-01",
+		"name": "[parameters('policyName')]",
+		"properties": {
+			"policyType": "Custom",
+			"displayName": "[parameters('policyDisplayName')]",
+			"metadata": {
+				"category": "BLK Custom"
+			},
+			"mode": "Indexed",
+			"parameters": {},
+			"policyRule": {
+				"if": {
+					"allOf": [{
+							"field": "type",
+							"equals": "Microsoft.Network/networkSecurityGroups"
+						},
+						{
+							"field": "location",
+							"equals": "[parameters('location')]"
+						}
+					]
+				},
+				"then": {
+					"effect": "deployIfNotExists",
+					"details": {
+						"type": "Microsoft.Insights/diagnosticSettings",
+						"name": "setByPolicy",
+						"roleDefinitionIds": [
+							"/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+						],
+						"existenceCondition": {
+							"allOf": [{
+									"field": "Microsoft.Insights/diagnosticSettings/logs.enabled",
+									"equals": "True"
+								},
+								{
+									"field": "Microsoft.Insights/diagnosticSettings/metrics.enabled",
+									"equals": "True"
+								},
+								{
+									"field": "Microsoft.Insights/diagnosticSettings/storageAccountId",
+									"matchInsensitively": "[parameters('storageAccount')]"
+								}
+							]
+						},
+						"deployment": {
+							"properties": {
+								"mode": "incremental",
+								"template": {
+									"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+									"contentVersion": "1.0.0.0",
+									"parameters": {
+										"diagnosticsSettingName": {
+											"type": "string"
+										},
+										"resourceName": {
+											"type": "string"
+										},
+										"storageAccount": {
+											"type": "string"
+										},
+										"location": {
+											"type": "string"
+										}
+									},
+									"variables": {},
+									"resources": [{
+										"type": "Microsoft.KeyVault/vaults/providers/diagnosticSettings",
+										"apiVersion": "2017-05-01-preview",
+										"name": "[concat(parameters('resourceName'), '/', 'Microsoft.Insights/', parameters('diagnosticsSettingName'))]",
+										"location": "[parameters('location')]",
+										"dependsOn": [],
+										"properties": {
+											"storageAccountId": "[parameters('storageAccount')]",
+											"metrics": [{
+												"category": "AllMetrics",
+												"enabled": true,
+												"retentionPolicy": {
+													"days": 0,
+													"enabled": false
+												},
+												"timeGrain": null
+											}],
+											"logs": [{
+												"category": "AuditEvent",
+												"enabled": true
+											}]
+										}
+									}],
+									"outputs": {}
+								},
+								"parameters": {
+									"nsgDiagnosticsSettingName": {
+										"value": "[parameters('diagnosticsSettingName')]"
+									},
+									"storageAccount": {
+										"value": "[parameters('storageAccount')]"
+									},
+									"location": {
+										"value": "[parameters('location')]"
+									},
+									"resourceName": {
+										"value": "[parameters('resourceName')]"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}]
+}

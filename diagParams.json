@@ -1,0 +1,32 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"location": {
+			"type": "string",
+			"value": ""
+		},
+		"diagnosticsSettingName": {
+			"type": "string",
+			"value": ""
+		},
+		"storageAccount": {
+			"type": "string",
+			"value": ""
+		},
+		"policyName": {
+			"type": "string",
+			"value": ""
+		},
+		"policyDisplayName": {
+			"type": "string",
+			"value": ""
+		},
+		"resourceName": {
+			"type": "string",
+			"value": ""
+		}
+	}
+}
+
+    
