@@ -111,15 +111,19 @@
 									"parameters": {
 										"diagnosticsSettingName": {
 											"type": "string"
+											"value": [parameters('diagnosticsSettingName')]
 										},
 										"resourceName": {
 											"type": "string"
+											"value": [parameters('resourceName')]
 										},
 										"storageAccount": {
 											"type": "string"
+											"value": [parameters('storageAccount')]
 										},
 										"location": {
 											"type": "string"
+											"value": [parameters('location')]
 										}
 									},
 									"variables": {},
