@@ -25,6 +25,14 @@
 		"resourceName": {
 			"type": "string",
 			"value": ""
+		},
+		"resourceType": {
+			"type": "string",
+			"value": ""
+		},
+		"dineTest": {
+			"type": "string",
+			"value": ""
 		}
 	}
 }
