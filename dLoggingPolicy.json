@@ -35,14 +35,21 @@
 		"resourceType":{
 			"type": "string",
 			"metadata": {
-				"description": "The resource to be deployed. (Microsoft.KeyVault/vaults/providers/diagnosticSettings)"
+				"description": "The resource type to be deployed. (Microsoft.KeyVault/vaults/providers/diagnosticSettings)"
+			}
+			
+		},
+		"resourceName":{
+			"type": "string",
+			"metadata": {
+				"description": "The name of the resource where diagnostic settings will be deployed."
 			}
 			
 		},
 		"dineTest":{
 			"type": "string",
 			"metadata": {
-				"description": "The resource being tested for the existance of diagnostic settings. (Microsoft.Network/networkSecurityGroups)"
+				"description": "The resource type being tested for the existance of diagnostic settings. (Microsoft.Network/networkSecurityGroups)"
 			}
 			
 		}
