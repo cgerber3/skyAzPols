@@ -117,7 +117,7 @@
 									},
 									"variables": {},
 									"resources": [{
-										"type": "[parameters('resourceType')],
+										"type": "[parameters('resourceType')]",
 										"apiVersion": "2017-05-01-preview",
 										"name": "[concat(parameters('resourceName'), '/', 'Microsoft.Insights/', parameters('diagnosticsSettingName'))]",
 										"location": "[parameters('location')]",
