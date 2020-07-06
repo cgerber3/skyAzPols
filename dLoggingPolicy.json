@@ -11,7 +11,7 @@
 		"diagnosticsSettingName": {
 			"type": "string",
 			"metadata": {
-				"description": "The name of the KV Diagnostic setting"
+				"description": "The name of the Diagnostic setting"
 			}
 		},
 		"storageAccount": {
@@ -31,6 +31,20 @@
 			"metadata": {
 				"description": "The display name of the policy"
 			}
+		},
+		"resourceType":{
+			"type": "string",
+			"metadata": {
+				"description": "The resource to be deployed. (Microsoft.KeyVault/vaults/providers/diagnosticSettings)"
+			}
+			
+		},
+		"dineTest":{
+			"type": "string",
+			"metadata": {
+				"description": "The resource being tested for the existance of diagnostic settings. (Microsoft.Network/networkSecurityGroups)"
+			}
+			
 		}
 	},
 	"variables": {},
@@ -50,7 +64,7 @@
 				"if": {
 					"allOf": [{
 							"field": "type",
-							"equals": "Microsoft.Network/networkSecurityGroups"
+							"equals": "[parameters('dineTest')]"
 						},
 						{
 							"field": "location",
@@ -103,7 +117,7 @@
 									},
 									"variables": {},
 									"resources": [{
-										"type": "Microsoft.KeyVault/vaults/providers/diagnosticSettings",
+										"type": "[parameters('resourceType')],
 										"apiVersion": "2017-05-01-preview",
 										"name": "[concat(parameters('resourceName'), '/', 'Microsoft.Insights/', parameters('diagnosticsSettingName'))]",
 										"location": "[parameters('location')]",
@@ -128,7 +142,7 @@
 									"outputs": {}
 								},
 								"parameters": {
-									"nsgDiagnosticsSettingName": {
+									"diagnosticsSettingName": {
 										"value": "[parameters('diagnosticsSettingName')]"
 									},
 									"storageAccount": {
@@ -139,6 +153,9 @@
 									},
 									"resourceName": {
 										"value": "[parameters('resourceName')]"
+									},
+									"resourceType": {
+										"value": "[parameters('resourceType')]"
 									}
 								}
 							}
